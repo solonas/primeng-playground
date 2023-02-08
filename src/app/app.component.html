@@ -18,10 +18,9 @@
         <th *ngFor="let col of columns" [ngSwitch]="col.field">
           <div class="p-d-flex p-jc-between p-ai-center">
             {{col.header}}
-            <p-columnFilter type="text" field="name" display="menu" *ngSwitchCase="'name'"></p-columnFilter>
-            <p-columnFilter type="text" field="country.name" display="menu" *ngSwitchCase="'country'"></p-columnFilter>
-            <p-columnFilter field="representative" matchMode="in" display="menu" [showMatchModes]="false"
-              [showOperator]="false" [showAddButton]="false" *ngSwitchCase="'representative'">
+            <p-columnFilter type="text" field="name" *ngSwitchCase="'name'"></p-columnFilter>
+            <p-columnFilter type="text" field="country.name" *ngSwitchCase="'country'"></p-columnFilter>
+            <p-columnFilter field="representative" matchMode="in" [showMenu]="false" *ngSwitchCase="'representative'">
               <ng-template pTemplate="header">
                 <div class="p-px-3 p-pt-3 p-pb-0">
                   <span class="p-text-bold">Agent Picker</span>
@@ -38,9 +37,9 @@
                 </p-multiSelect>
               </ng-template>
             </p-columnFilter>
-            <p-columnFilter type="date" field="date" display="menu" *ngSwitchCase="'date'"></p-columnFilter>
-            <p-columnFilter type="numeric" field="balance" display="menu" currency="USD" *ngSwitchCase="'balance'"></p-columnFilter>
-            <p-columnFilter field="status" matchMode="equals" display="menu" *ngSwitchCase="'status'">
+            <p-columnFilter type="date" field="date" *ngSwitchCase="'date'"></p-columnFilter>
+            <p-columnFilter type="numeric" field="balance" currency="USD" *ngSwitchCase="'balance'"></p-columnFilter>
+            <p-columnFilter field="status" matchMode="equals" *ngSwitchCase="'status'">
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                 <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)"
                   placeholder="Any">
@@ -50,7 +49,7 @@
                 </p-dropdown>
               </ng-template>
             </p-columnFilter>
-            <p-columnFilter field="activity" matchMode="between" display="menu" [showMatchModes]="false"
+            <p-columnFilter field="activity" matchMode="between" [showMatchModes]="false"
               [showOperator]="false" [showAddButton]="false" *ngSwitchCase="'activity'">
               <ng-template pTemplate="filter" let-filter="filterCallback">
                 <p-slider [ngModel]="activityValues" [range]="true" (onSlideEnd)="filter($event.values)"
@@ -61,7 +60,7 @@
                 </div>
               </ng-template>
             </p-columnFilter>
-            <p-columnFilter type="boolean" field="verified" display="menu" *ngSwitchCase="'verified'"></p-columnFilter>
+            <p-columnFilter type="boolean" field="verified" *ngSwitchCase="'verified'"></p-columnFilter>
           </div>
         </th>
       </tr>
@@ -85,5 +84,4 @@
         <td colspan="7">No customers found.</td>
       </tr>
     </ng-template>
-  </p-table>
-
+</p-table>
