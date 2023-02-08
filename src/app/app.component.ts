@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Customer, Representative } from "./customer";
 import { CustomerService } from "./customer-service";
 import { MessageService } from "primeng/api";
@@ -19,6 +19,19 @@ export class AppComponent {
 
   activityValues: number[] = [0, 100];
 
+  cols: any[] = [];
+
+  _selectedColumns: any[] = [];
+
+  @Input() get selectedColumns(): any[] {
+      return this._selectedColumns;
+  }
+
+  set selectedColumns(val: any[]) {
+      //restore original order
+      this._selectedColumns = this.cols.filter(col => val.includes(col));
+  }
+
   constructor(private customerService: CustomerService) {}
 
   ngOnInit() {
@@ -32,8 +45,24 @@ export class AppComponent {
             customer.date = new Date(customer.date)
           }
         }
-      )
-    });
+      );
+
+      this.cols = [
+        { field: 'name', header: 'Name' },
+        { field: 'country', header: 'Country' },
+        { field: 'status', header: 'Status' },
+        { field: 'verified', header: 'Verified' },
+        { field: 'representative', header: 'Agent'},
+        { field: 'date', header: 'Date'},
+        { field: 'balance', header: 'Balance'},
+        { field: 'status', header: 'Status'},
+        { field: 'activity', header: 'Activity'},
+        { field: 'verified', header: 'Verified'}
+      ];
+
+      this._selectedColumns = this.cols;
+
+    })
 
     this.representatives = [
       { name: "Amy Elsner", image: "amyelsner.png" },
