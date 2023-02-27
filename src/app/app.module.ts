@@ -9,6 +9,10 @@ import { CustomerService } from './customer-service';
 
 import { AppRoutingModule } from './app-routing.module';
 
+import { CustomerDetailsComponent } from './customer-details/customer-details.component';
+import { CustomerListComponent } from './customer-list/customer-list.component';
+import { HomeComponent } from './home/home.component';
+
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { CalendarModule } from 'primeng/calendar';
@@ -20,9 +24,6 @@ import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { InputTextModule } from 'primeng/inputtext';
-import { CustomerDetailsComponent } from './customer-details/customer-details.component';
-import { CustomerListComponent } from './customer-list/customer-list.component';
-import { HomeComponent } from './home/home.component';
 
 @NgModule({
   imports: [

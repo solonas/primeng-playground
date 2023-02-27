@@ -1,8 +1,10 @@
 import { Component, Input } from "@angular/core";
+import { Router } from "@angular/router";
+
+import { MenuItem, MessageService } from 'primeng/api';
 
 import { Customer, Representative } from "../customer";
 import { CustomerService } from "../customer-service";
-import { MessageService } from "primeng/api";
 
 @Component({
   selector: 'app-customer-list',
@@ -24,6 +26,10 @@ export class CustomerListComponent {
 
   _selectedColumns: any[] = [];
 
+  menuItems: MenuItem[];
+
+  selectedCustomer: Customer;
+
   @Input() get selectedColumns(): any[] {
       return this._selectedColumns;
   }
@@ -33,7 +39,16 @@ export class CustomerListComponent {
       this._selectedColumns = this.cols.filter(col => val.includes(col));
   }
 
-  constructor(private customerService: CustomerService) {}
+  constructor(private customerService: CustomerService, private router: Router) {
+    this.menuItems = [
+      {label: 'View', icon: 'pi pi-fw pi-search', command: () => this.viewCustomer(this.selectedCustomer)},
+    ];
+    this.selectedCustomer = null as unknown as Customer
+  }
+
+  viewCustomer(selectedCustomer: Customer) {
+    this.router.navigate([`/customer-details/${selectedCustomer.id}`]);
+  }
 
   ngOnInit() {
     this.customerService.getCustomersLarge().then(customers => {

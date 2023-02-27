@@ -1,10 +1,15 @@
 
 <h5>Filter Menu</h5>
+
 <p>Filters are displayed in an overlay.</p>
+
+<p-contextMenu #cm [model]="menuItems"></p-contextMenu>
+
 <p-table #dt1 [value]="customers" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [columns]="selectedColumns"
     [rowsPerPageOptions]="[10,25,50]" [loading]="loading" styleClass="p-datatable-customers p-datatable-gridlines"
     [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [globalFilterFields]="['name','country.name','representative.name','status']">
+    [globalFilterFields]="['name','country.name','representative.name','status']"
+    [(contextMenuSelection)]="selectedCustomer" [contextMenu]="cm">
     <ng-template pTemplate="caption">
       <div class="p-d-flex">
         <span class="p-input-icon-left p-ml-auto">
@@ -67,7 +72,7 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-customer let-columns="columns">
-      <tr>
+      <tr [pContextMenuRow]="customer">
         <td *ngFor="let col of columns" [ngSwitch]="col.field">
           <span *ngSwitchCase="'name'">{{customer.name}}</span>
           <span class="image-text" *ngSwitchCase="'country'">{{customer.country.name}}</span>
