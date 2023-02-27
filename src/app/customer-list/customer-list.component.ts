@@ -1,7 +1,8 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { MenuItem, MessageService } from 'primeng/api';
+import { FilterMetadata, MenuItem, MessageService } from 'primeng/api';
+import { Table } from "primeng/table";
 
 import { Customer, Representative } from "../customer";
 import { CustomerService } from "../customer-service";
@@ -30,12 +31,18 @@ export class CustomerListComponent {
 
   selectedCustomer: Customer;
 
+  filters: {
+    [s: string]: FilterMetadata | FilterMetadata[] | undefined;
+  };
+
   @Input() get selectedColumns(): any[] {
       return this._selectedColumns;
   }
 
+  @ViewChild('dt1') myTable!: Table;
+
   set selectedColumns(val: any[]) {
-      //restore original order
+      // restore original order
       this._selectedColumns = this.cols.filter(col => val.includes(col));
   }
 
@@ -44,13 +51,18 @@ export class CustomerListComponent {
       {label: 'View', icon: 'pi pi-fw pi-search', command: () => this.viewCustomer(this.selectedCustomer)},
     ];
     this.selectedCustomer = null as unknown as Customer
+    this.filters = {}
   }
 
   viewCustomer(selectedCustomer: Customer) {
+    this.customerService.selectedFilters = this.myTable.filters
     this.router.navigate([`/customer-details/${selectedCustomer.id}`]);
   }
 
   ngOnInit() {
+    if (this.customerService.selectedFilters !== null) {
+      this.filters = this.customerService.selectedFilters
+    }
     this.customerService.getCustomersLarge().then(customers => {
       this.customers = customers;
       this.loading = false;

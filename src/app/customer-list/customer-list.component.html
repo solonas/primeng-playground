@@ -9,7 +9,8 @@
     [rowsPerPageOptions]="[10,25,50]" [loading]="loading" styleClass="p-datatable-customers p-datatable-gridlines"
     [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [globalFilterFields]="['name','country.name','representative.name','status']"
-    [(contextMenuSelection)]="selectedCustomer" [contextMenu]="cm">
+    [(contextMenuSelection)]="selectedCustomer" [contextMenu]="cm"
+    [filters]="filters">
     <ng-template pTemplate="caption">
       <div class="p-d-flex">
         <span class="p-input-icon-left p-ml-auto">
