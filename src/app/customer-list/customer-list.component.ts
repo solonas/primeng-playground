@@ -50,9 +50,8 @@ export class CustomerListComponent {
 
       this.cols = [
         { field: 'name', header: 'Name' },
-        { field: 'country', header: 'Country' },
-        { field: 'status', header: 'Status' },
-        { field: 'verified', header: 'Verified' },
+        // disabled column country for better table readbility -> field type is same as name
+        // { field: 'country', header: 'Country' },
         { field: 'representative', header: 'Agent'},
         { field: 'date', header: 'Date'},
         { field: 'balance', header: 'Balance'},
