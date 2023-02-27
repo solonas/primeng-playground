@@ -1,0 +1,88 @@
+
+<h5>Filter Menu</h5>
+<p>Filters are displayed in an overlay.</p>
+<p-table #dt1 [value]="customers" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [columns]="selectedColumns"
+    [rowsPerPageOptions]="[10,25,50]" [loading]="loading" styleClass="p-datatable-customers p-datatable-gridlines"
+    [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [globalFilterFields]="['name','country.name','representative.name','status']">
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex">
+        <span class="p-input-icon-left p-ml-auto">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" />
+        </span>
+      </div>
+      <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header" selectedItemsLabel="{0} columns selected" [style]="{'min-width': '200px'}" placeholder="Choose Columns"></p-multiSelect>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns" [ngSwitch]="col.field">
+          <div class="p-d-flex p-jc-between p-ai-center">
+            {{col.header}}
+            <p-columnFilter type="text" field="name" *ngSwitchCase="'name'"></p-columnFilter>
+            <p-columnFilter type="text" field="country.name" *ngSwitchCase="'country'"></p-columnFilter>
+            <p-columnFilter field="representative" matchMode="in" [showMenu]="false" *ngSwitchCase="'representative'">
+              <ng-template pTemplate="header">
+                <div class="p-px-3 p-pt-3 p-pb-0">
+                  <span class="p-text-bold">Agent Picker</span>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect [ngModel]="value" [options]="representatives" placeholder="Any"
+                  (onChange)="filter($event.value)" optionLabel="name">
+                  <ng-template let-option pTemplate="item">
+                    <div class="p-multiselect-representative-option">
+                      <span class="p-ml-1">{{option.name}}</span>
+                    </div>
+                  </ng-template>
+                </p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+            <p-columnFilter type="date" field="date" *ngSwitchCase="'date'"></p-columnFilter>
+            <p-columnFilter type="numeric" field="balance" currency="USD" *ngSwitchCase="'balance'"></p-columnFilter>
+            <p-columnFilter field="status" matchMode="equals" *ngSwitchCase="'status'">
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)"
+                  placeholder="Any">
+                  <ng-template let-option pTemplate="item">
+                    <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
+                  </ng-template>
+                </p-dropdown>
+              </ng-template>
+            </p-columnFilter>
+            <p-columnFilter field="activity" matchMode="between" [showMatchModes]="false"
+              [showOperator]="false" [showAddButton]="false" *ngSwitchCase="'activity'">
+              <ng-template pTemplate="filter" let-filter="filterCallback">
+                <p-slider [ngModel]="activityValues" [range]="true" (onSlideEnd)="filter($event.values)"
+                  styleClass="p-m-3"></p-slider>
+                <div class="p-d-flex p-ai-center p-jc-between p-px-2">
+                  <span>{{activityValues[0]}}</span>
+                  <span>{{activityValues[1]}}</span>
+                </div>
+              </ng-template>
+            </p-columnFilter>
+            <p-columnFilter type="boolean" field="verified" *ngSwitchCase="'verified'"></p-columnFilter>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-customer let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns" [ngSwitch]="col.field">
+          <span *ngSwitchCase="'name'">{{customer.name}}</span>
+          <span class="image-text" *ngSwitchCase="'country'">{{customer.country.name}}</span>
+          <span class="image-text" *ngSwitchCase="'representative'">{{customer.representative.name}}</span>
+          <span *ngSwitchCase="'date'">{{customer.date | date: 'MM/dd/yyyy'}}</span>
+          <span *ngSwitchCase="'balance'">{{customer.balance | currency:'USD':'symbol'}}</span>
+          <span [class]="'customer-badge status-' + customer.status" *ngSwitchCase="'status'">{{customer.status}}</span>
+          <p-progressBar [value]="customer.activity" [showValue]="false" *ngSwitchCase="'activity'"></p-progressBar>
+          <i class="pi" [ngClass]="{'true-icon pi-check-circle': customer.verified, 'false-icon pi-times-circle': !customer.verified}" *ngSwitchCase="'verified'"></i>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7">No customers found.</td>
+      </tr>
+    </ng-template>
+</p-table>
